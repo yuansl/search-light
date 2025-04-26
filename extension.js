@@ -450,7 +450,7 @@ export default class SearchLightExt extends Extension {
     this._updateCss();
     this._layout();
 
-    Meta.disable_unredirect_for_display(global.display);
+    global.compositor.disable_unredirect();
 
     this.mainContainer.show();
     this.container.show();
@@ -504,14 +504,14 @@ export default class SearchLightExt extends Extension {
         onComplete: () => {
           this._visible = false;
           this.mainContainer.hide();
-          Meta.enable_unredirect_for_display(global.display);
+          global.compositor.enable_unredirect();
         },
       });
     } else {
       this.mainContainer.opacity = 0;
       this._visible = false;
       this.mainContainer.hide();
-      Meta.enable_unredirect_for_display(global.display);
+      global.compositor.enable_unredirect();
     }
     // this._hidePopups();
   }
@@ -981,7 +981,7 @@ export default class SearchLightExt extends Extension {
     if (!this._entry) return;
     let focus = global.stage.get_key_focus();
     let appearFocused =
-      this._entry.contains(focus) || this._searchResults.contains(focus);
+	focus && (this._entry.contains(focus) || this._searchResults.contains(focus));
 
     if (!appearFocused) {
       // popups are not handled well.. hide immediately
